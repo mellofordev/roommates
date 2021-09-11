@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#673AB6" >
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Socket.IO chat</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;background-color: #242c37; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #673AB6; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem;color: #efefef; }
+      .grid-container{display: grid;grid-template-columns: auto auto auto;padding: 10px;}
+      .grid-item{padding: 20px;}
+      .topnav{display: flex;backdrop-filter: blur(10px);}
+    </style>
+  
+  </head>
+  <body>
+    <nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top w3-small-hide w3-black" style="z-index:3;width:90px;overflow-x:hidden;" id="mySidebar">
+  
+      <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+        <a href="#" class="w3-bar-item w3-button">Home</a>
+        <a href="#rooms" class="w3-bar-item w3-button">Rooms</a>
+        <a href="#live" class="w3-bar-item w3-button">Live</a>
+        <a href="#u/username" class="w3-bar-item w3-button">Profile</a>
+        <a href="#settings" class="w3-bar-item w3-button">Settings</a>
+        <a href="#create" class="w3-bar-item w3-button">Create Room</a>
+      </div>
+      <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a>
+      <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding" onclick="document.getElementById('newsletter').style.display='block'">Blog</a>
+      <a href="#footer" class="w3-bar-item w3-button w3-padding">Latest Updates</a>
+    </nav>
+    <div class=" w3-top  w3-sidebar w3-bar-block  w3-collapse  w3-small-hide w3-border-white " style="width:250px;overflow-x:hidden;height:100%;right:0;background: rgba(0, 0, 0, 0.25);" id="mySidebar2">
+  
+      <div class="w3-padding-64 w3-large w3-text-grey grid-container" style="font-weight:bold">
+        <a href="#" class="w3-bar-item w3-button grid-item" id="memberscount">Online</a>
+        <a href="#" class="w3-button  w3-transparent w3-white w3-round-xlarge grid-item w3-bar-item " id="desktopleave"  style="margin-left:15px;">🔴 Leave</a>
+      </div>
+      
+      <div id="membersonline">
+        <a href="#footer" class="w3-bar-item w3-button w3-padding">Latest Updates</a>
+      </div>
+      
+      
+     </div>  
+  <div class="w3-main" style="margin-left:90px; margin-right:120px;">
+    <header class="w3-nav w3-top topnav " style="background:rgba(0,0,0,0.15);">
+      <p style="color:#673AB6; margin-left:13px; flex-grow: 1;"><strong>Roommatesbeta</strong></p>
+      <button class=" w3-button w3-transparent" id="mobileleave" >🔴</button>
+    </header>
+    <div id="join" style="align-items: center; ">
+      
+    </div>
+    <ul id="messages" style="margin-top: 45px;"></ul>
+    <div id="typing"></div>
+    <div id="emojimodel" class="w3-modal" style="display: none;">
+      <div class=" animate-bottom w3-card-4 w3-round-xlarge w3-bottom" style="height:150px; background-color:rgb(15, 15, 15); overflow-y: scroll;">
+           <header class="w3-container  w3-round-xlarge" style="background-color: rgb(15, 15, 15);">
+          <span  onclick="document.getElementById('emojimodel').style.display='none'" class="w3-button  w3-display-topright w3-round-xlarge" style="color:#673AB6;">Done</span>
+        </header>
+         <div class="w3-container" >
+           <div class="grid-container">
+             <div class="grid-item"><img src="https://emoji.gg/assets/emoji/1979-stardewparrot.png" width="64px" height="64px" alt="StardewParrot"></div>
+             <div class="grid-item"><img src="https://emoji.gg/assets/emoji/1646-crashbandicootokhand.png" width="64px" height="64px" alt="CrashBandicootOkHand"></div>
+             <div class="grid-item">3</div>
+             <div class="grid-item"><img src="https://emoji.gg/assets/emoji/1979-stardewparrot.png" width="64px" height="64px" alt="StardewParrot"></div>
+             
+           </div>
+         </div>
+         <header class=" w3-bottom " style="color: rgb(41, 41, 41);">
+      <p>.</p>
+  </header>
+      </div>
+  </div>
+    <form id="form" action="" class="w3-main" style="margin-left:100px;margin-right:260px; border-radius:12px;">
+      <input id="input" autocomplete="off"  placeholder="type a msg ✒"/>
+      <label for="filebtn">
+        <span class="w3-button w3-black " >📷</span>
+      </label>
+      <input type="file" id="filebtn" accept="image/*" class="w3-button w3-transparent" style="display: none;"/>
+      
+      <button id="sendbtn" >Send</button>
+    </form>
+  </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>  
+  <script>
+  var socket = io();
+  
+  var username =prompt('enter the username');
+  var join=document.getElementById('join');
+  var messages = document.getElementById('messages');
+  var form = document.getElementById('form');
+  var input = document.getElementById('input');
+  var typing=document.getElementById('typing');
+  var file=document.getElementById('filebtn');
+  var members =document.getElementById('membersonline');
+  var onlinecount=document.getElementById('memberscount');
+  var online=0;
+  var updated_user_list=[];
+  if (username!=null){
+    socket.emit('user joined',username);
+    socket.on('count',(online,users)=>{
+      onlinecount.innerText='Online '+online;
+      users.forEach(user => {
+        var activeusers=document.createElement('a');
+        activeusers.href="#footer";
+        activeusers.innerText=user;
+        activeusers.className="w3-bar-item w3-button w3-padding";
+        activeusers.id=user;
+      });
+      members.appendChild(activeusers);
+
+    });
+  }
+  document.getElementById("sendbtn").addEventListener('click', function(e) {
+    e.preventDefault();
+    if (input.value!='' || username!=null) {
+      socket.emit('chat message', input.value,username);
+      input.value = '';      
+    }
+  });
+  file.addEventListener('change',function(e){
+    var data=file.files[0];
+    const reader = new FileReader();
+    reader.onload=function(evt){
+      var filedata={};
+      var match = reader.result.match(/^data:([^/]+)\/([^;]+);/) || [];
+      filedata.file=evt.target.result;
+      filedata.fileName=data.name;
+      filedata.fileType=match[1];
+      socket.emit('image',filedata,username);
+    };
+    reader.readAsDataURL(data);
+  });
+
+  input.addEventListener('keyup',function(){
+    socket.emit('typing',username);
+  });
+  document.getElementById('desktopleave').addEventListener('click',function(){
+    socket.emit('disconnect',username);
+    window.close();
+  });
+  socket.on('chat message', function(msg,username) {
+    typing.innerHTML='';
+    var item = document.createElement('li');
+    item.innerHTML = '<p><strong style="color:yellow;">'+username+'</strong>'+' : '+msg+'</p>';
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+    
+  });
+  socket.on('typing',function(username){
+    typing.innerHTML='<strong style="color:purple;">'+username+' typing...'+'</strong>';
+    window.scrollTo(0,document.body.scrollHeight);
+  });
+  socket.on('image',function(image,username){
+    console.log(username);
+    console.log(image.fileType);
+
+    var type=image.fileType;
+    if(type=='video'){
+    
+    var item = document.createElement('li');
+    var video=document.createElement('video');
+    video.src=image.file;
+    video.controls;
+    video.class='w3-image w3-round';
+    video.style='width:250px;height:250px;margin-left:15px;'
+    item.innerHTML = '<p><strong style="color:yellow;">'+username+'</strong></p><br>';
+    messages.appendChild(item);
+    messages.appendChild(video);      
+    }else if(type=='image'){
+      var imgsrc = image.file;
+      var item = document.createElement('li');
+      var imgs=document.createElement('img');
+      imgs.src=image.file;
+      imgs.class='w3-image w3-round';
+      imgs.style='width:250px;height:250px;margin-left:15px;'
+      item.innerHTML = '<p><strong style="color:yellow;">'+username+'</strong></p><br>';
+      messages.appendChild(item);
+      messages.appendChild(imgs);
+    }
+
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+  socket.on('user joined',function (username,online){
+    var item =document.createElement('li');
+    var activeusers=document.createElement('a');
+    activeusers.href="#footer";
+    activeusers.innerText=username;
+    activeusers.className="w3-bar-item w3-button w3-padding";
+    activeusers.id=username;
+    onlinecount.innerText='Online '+online;
+    members.appendChild(activeusers);
+    item.textContent=username+' joined the chat 🎉';
+    messages.appendChild(item);
+    window.scrollTo(0,document.body.scrollHeight);
+    window.navigator.vibrate(200);
+  });
+  socket.on('userleft',function(username){
+    var item =document.createElement('li');
+    item.textContent=username+' left the chat 😔';
+    messages.appendChild(item);
+    window.scrollTo(0,document.body.scrollHeight);
+  })
+  </script>
+</html>
