@@ -11,7 +11,7 @@ Roommates is an anonymous group chat platform where users can dive into any topi
 - socket.io for websocket communication
 - w3.css framework for ui
 ## Contribution 
-roommates is open to contributions ,to get start with contribution read [CONTRIBUTION.md](https://github.com/mellofordev/roommates/CONTRIBUTION.md) .Before you start contributing you need to agree to follow [CODE_OF_CONDUCT.md](https://github.com/mellofordev/CODE_OF_CONDUCT.md)
+roommates is open to contributions ,to get start with contribution read [CONTRIBUTION.md](https://github.com/mellofordev/roommates/blob/main/CONTRIBUTION.md) .Before you start contributing you need to agree to follow [CODE_OF_CONDUCT.md](https://github.com/mellofordev/roommates/blob/main/CODE_OF_CONDUCT.md)
 ## TODO Features
 1. Support to share large media files by either using blob 
 2. Adding custom sticker API or Tweetmoji feature
