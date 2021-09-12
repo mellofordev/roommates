@@ -1,6 +1,6 @@
 # Contributing to roommates
 Contributions from people like you help roommates grow ,improve as a platform .We look forward on how you help to improve roommates.
-This project is following a [CODE_OF_CONDUCT.md](https://github.com/mellofordev/roommates/CODE_OF_CONDUCT.md). By participating in this project you agree to abide
+This project is following a [CODE_OF_CONDUCT.md](https://github.com/mellofordev/roommates/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide
 it's terms
 ## How you can contribute
 - You can submit an issue if you find any problems by running the project locally 
